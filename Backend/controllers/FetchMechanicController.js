@@ -17,35 +17,45 @@ export const fetch_mechanic = async (req, res) => {
     });
 
     if (!notifications.length) {
-      return res.status(404).json({ message: "No mechanics found", mechanics: [] });
+      return res
+        .status(404)
+        .json({ message: "No mechanics found", mechanics: [] });
     }
 
     // ✅ Fetch mechanic details for each notification
     const mechanics = await Promise.all(
       notifications.map(async (n) => {
         const mechanic = await Mechanic.findById(n.mechanic_id);
-        // console.log(mechanic.username)
         if (!mechanic) return null;
 
         return {
-          mechanic_id: mechanic._id,
-          name: mechanic.username || mechanic.username || "Unknown",
+          mechanic_id: mechanic._id.toString(),
+          name: mechanic.username || "Unknown",
           mobile: mechanic.mobile,
           location: mechanic.address || "Unknown",
           specialist: mechanic.specialist || "General Mechanic",
           isAccept: n.isAccept,
           notification_id: n._id,
-          
         };
       })
     );
 
-    // ✅ Filter null mechanics (just in case)
+    // ✅ Remove null entries
     const filtered = mechanics.filter((m) => m !== null);
 
+    // ✅ Remove duplicate mechanics by mechanic_id
+    const uniqueMap = new Map();
+    filtered.forEach((m) => {
+      if (!uniqueMap.has(m.mechanic_id)) {
+        uniqueMap.set(m.mechanic_id, m);
+      }
+    });
+
+    const uniqueMechanics = Array.from(uniqueMap.values());
+
     return res.status(200).json({
-      message: filtered.length + " mechanics found",
-      mechanics: filtered,
+      message: uniqueMechanics.length + " unique mechanics found",
+      mechanics: uniqueMechanics,
     });
 
   } catch (e) {

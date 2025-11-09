@@ -9,7 +9,7 @@ const Profile = async (req, res) => {
         // Find user
         let user = await User.findOne({ email: user_details.email });
         let is_mechanic = false;
-
+        let service_req_number=null;
         // If not found in User collection, check mechanic collection
         if (!user) {
             user = await Mechanic.findOne({ email: user_details.email });
@@ -25,6 +25,7 @@ const Profile = async (req, res) => {
         if (!is_mechanic) {
             // User
             user_services = await services_.find({ email: user.email });
+            
         } else {
             // Mechanic
             user_services = await services_.find({ mechanic_id: user._id });
@@ -41,7 +42,7 @@ const Profile = async (req, res) => {
         stats.completed = user_services.filter(s => s.status === "completed").length;
         stats.rejected = user_services.filter(s => s.status === "rejected").length;
         stats.pending = user_services.filter(s => s.status === "pending").length;
-
+        //service_req_number=user_services.filter(s=>s.status=="accepted").mobile;
         const pending_requests = user_services.filter(s => s.status === "pending");
         console.log("Pending Requests:", pending_requests);
         return res.json({

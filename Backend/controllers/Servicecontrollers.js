@@ -81,8 +81,11 @@ const service_matching = async (req, res) => {
           mechanic_mobile: mechanic.mobile,
           customer_mobile: mobile,
           message: `New service request: ${repair_msg}`,
+          latitude:latitude,
+          longitude:longitude,
           isAccept: false,
           mechanic_name:mechanic.username,
+          service_id: savedService._id ,
         })
       )
     );

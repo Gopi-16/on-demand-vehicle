@@ -23,10 +23,21 @@ const notificationSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  latitude:{
+    type: Number,
+    required: false,},
+    longitude:{
+      type:Number,
+      required:false,
+    },
   isAccept: {
     type: Boolean,
     default: false,
   },
+  service_id:{
+    type:String,
+    required:true,  }
+
 }, { timestamps: true });
 
 const Notification = mongoose.model("Notification", notificationSchema);

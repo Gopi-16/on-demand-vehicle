@@ -6,8 +6,10 @@ import authRoutes from './routes/authRoutes.js';
 import serviceRoutes from './routes/services_routes.js';
 import fetchmechanic from './routes/fetchMechanic.js';
 import sendotp from './routes/sendOTP.js';
+import mechanicRequestes from './routes/mechanicRequests.js';
 const app = express();
 dotenv.config();
+
 connectDB();
 
 app.use(cors());
@@ -22,6 +24,7 @@ app.use('/api/auth',authRoutes);
 app.use('/api/auth' ,serviceRoutes);
 app.use('/api/mechanic',fetchmechanic);
 app.use('/api/auth',sendotp);
+app.use('/api/mechanic',mechanicRequestes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

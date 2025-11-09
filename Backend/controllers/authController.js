@@ -6,17 +6,17 @@ import { signAccessToken,signRefreshToken,verifyAccesToken,verifyRefreshToken } 
 
 const register = async (req, res) => {
     //console.log(req.body);
-    const {username, email, password,mobile,vehicle_number,address,latitude,longitude} = req.body;
-
-    if (address==="" || address === undefined){
+    const {username, email, password,mobile,vehicle_number,address,latitude,longitude,type} = req.body;
+    console.log(req.body)
+    if (type!="mechanic"){
         const vehicle_=await Vehicle.findOne({vehicle_number:vehicle_number})
-        console.log(await Vehicle.find())
+        //console.log(await Vehicle.find())
         if(!vehicle_){
             return res.json({message:"Vehicle not found"});
         }
         if (vehicle_.vehicle_number==vehicle_number){
             const newUser = new User({ username, email, password,mobile ,vehicle_number});
-            newUser.save()
+            await newUser.save()
             .then(user => res.status(201).json({ message: 'User registered successfully', user }))
             .catch(err => res.status(500).json({ error: 'Error registering user', details: err }));}
         else{
