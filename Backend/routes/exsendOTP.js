@@ -6,6 +6,7 @@ router.post('/sendotp',sendOTPController.sendOTP);
 
 router.post('/verifyotp',sendOTPController.verifyOTP);
 
+
 router.post('/resendotp',sendOTPController.resendOTP);
 
 
